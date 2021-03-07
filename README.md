@@ -1,1 +1,1 @@
-# ensembl-test
+# ENSEMBL technical test
