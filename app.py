@@ -17,6 +17,12 @@ def handle_exception(e):
     return error_response(e.code, e.description)
 
 
+def species_exist(species):
+    result = db.session.query(gene_autocomplete) \
+        .filter(gene_autocomplete.c.species == species).first()
+    return result
+
+
 def make_search(species, query, limit):
     search = "%{}%".format(query)
     result = db.session.query(gene_autocomplete) \
@@ -34,11 +40,17 @@ def gene_suggest():
     query = request.args.get('query')
     limit = request.args.get('limit', 10, type=int)
 
-    if not species or species == '':
+    if not species:
         return error_response(400, 'Missing parameter: species')
+
+    if not query:
+        return error_response(400, 'Missing parameter: query')
 
     if limit <= 0:
         return error_response(400, 'Wrong parameter value: limit')
+
+    if not species_exist(species):
+        return error_response(400, 'Species does not exist')
 
     result = make_search(species, query, limit)
 
