@@ -35,10 +35,10 @@ def gene_suggest():
     limit = request.args.get('limit', 10, type=int)
 
     if not species or species == '':
-        return error_response(400, 'Missing parameter')
+        return error_response(400, 'Missing parameter: species')
 
     if limit <= 0:
-        return error_response(400, 'Wrong parameter value')
+        return error_response(400, 'Wrong parameter value: limit')
 
     result = make_search(species, query, limit)
 
